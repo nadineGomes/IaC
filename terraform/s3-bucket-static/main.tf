@@ -24,7 +24,7 @@ resource "aws_s3_bucket_public_access_block" "static_site_bucket" {
     bucket = aws_s3_bucket.static_site_bucket.id
 
     block_public_acls       = false
-    block_public_polivy     = false
+    block_public_policy     = false
     ignore_public_acls      = false
     restrict_public_buckets = false
 }
