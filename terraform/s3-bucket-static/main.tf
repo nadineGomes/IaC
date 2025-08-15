@@ -6,11 +6,15 @@ variable "bucket_name" {
     type = string
 }
 
-resource "aws_s3_bucket_website_configuration" "static_site_config" {
+resource "aws_s3_bucket" "static_site_bucket" {
     bucket = "static-site-${var.bucket_name}"
+}
+
+resource "aws_s3_bucket_website_configuration" "static_site_config" {
+    bucket = aws_s3_bucket.static_site_bucket.bucket    
 
     index_document {
-        isuffix = "index.html"
+        suffix = "index.html"
     }
 
    error_document  {
