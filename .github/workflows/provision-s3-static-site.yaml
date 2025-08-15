@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.issue.title, 'Create S3 Static Site')
+    if: startsWith(github.event.issue.title, 'front')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
