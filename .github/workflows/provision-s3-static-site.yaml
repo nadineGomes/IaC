@@ -2,12 +2,13 @@ name: Create S3 Static Site
 
 on:
   issues:
-    types: 
+    type: 
       - opened
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+#    if: startsWith(github.event.issue.title, 'front')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -21,11 +22,16 @@ jobs:
 
       - name: Extract Bucket Name from Issue
         run: |
-          # O nome do bucket será o título da issue, convertido para minúsculas
-          BUCKET_NAME=$(echo "${{ github.event.issue.title }}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/^-//g' | sed 's/-$//g')
-          echo "BUCKET_NAME=$BUCKET_NAME" >> $GITHUB_ENV
+          export BUCKET_NAME=$(echo "${{ github.event.issue.title }}")
           echo "Bucket Name: $BUCKET_NAME"
+          echo "BUCKET_NAME=$BUCKET_NAME" >> $GITHUB_ENV
 
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2  
+        with:
+          terraform_version: 1.5.0
+          terraform_wrapper: false
+          
       - name: Run Terraform
         run: |
           cd terraform
@@ -41,3 +47,4 @@ jobs:
           REPO: ${{ github.repository }}
           BODY: >
             O bucket S3 foi criado com sucesso! 🎉
+
