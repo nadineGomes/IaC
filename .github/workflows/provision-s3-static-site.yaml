@@ -1,9 +1,12 @@
 name: Create S3 Static Site 
 
 on:
-  issues:
-    type: 
-      - opened
+  # Permite a execução manual a partir da interface do GitHub
+  workflow_dispatch:
+    inputs:
+      bucket_name:
+        required: true
+        type: string
 
 jobs:
   deploy:
@@ -34,8 +37,7 @@ jobs:
           
       - name: Run Terraform
         run: |
-          cd terraform
-          cd s3-bucket-static
+          cd modules/s3-bucket-static
           terraform init
           terraform apply -auto-approve -var="bucket_name=${{ env.BUCKET_NAME }}"
 
