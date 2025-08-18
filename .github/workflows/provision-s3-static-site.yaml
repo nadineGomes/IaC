@@ -40,7 +40,7 @@ jobs:
         run: |
           cd modules/s3-bucket-static
           terraform init
-          terraform apply -auto-approve -var="bucket_name=${{ env.BUCKET_NAME }}"
+          terraform apply -auto-approve -var="bucket_name=${{ github.event.inputs.bucket_name }}"
 
       # - name: Add comment
       #   run: gh issue comment "$NUMBER" --repo "$REPO" --body "$BODY"
