@@ -4,7 +4,8 @@ on:
   # Permite a execução manual a partir da interface do GitHub
   workflow_dispatch:
     inputs:
-      instance_type:
+      instance_name: 
+        description: 'Nome da instância EC2 a ser criada'
         required: true
         type: string
 
@@ -27,14 +28,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Extract Instance Name from Issue
-        run: |
-          export INSTANCE_NAME=$(echo "${{ github.event.issue.title }}")
-          echo "Instance Name: $INSTANCE_NAME"
-          echo "INSTANCE_NAME=$INSTANCE_NAME" >> $GITHUB_ENV          
+      # - name: Extract Instance Name from Issue
+      #   run: |
+      #     export INSTANCE_NAME=$(echo "${{ github.event.issue.title }}")
+      #     echo "Instance Name: $INSTANCE_NAME"
+      #     echo "INSTANCE_NAME=$INSTANCE_NAME" >> $GITHUB_ENV          
 
       - name: Run Terraform for EC2
         run: |
           cd modules/ec2-instance
           terraform init
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var="instance_name=${{ github.event.inputs.instance_name }}"
