@@ -6,5 +6,7 @@ resource "aws_instance" "web_server" {
     Environment = var.env
     provisioner = "web_server_terraform"
     Repo        = var.repo
+    key_name    = "minha-chave-aws"
+
   }
 }
