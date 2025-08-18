@@ -1,7 +1,12 @@
 name: Provision EC2 Instance
 
 on:
+  # Permite a execução manual a partir da interface do GitHub
   workflow_dispatch:
+    inputs:
+      instance_type:
+        required: true
+        type: string
 
 jobs:
   deploy:
