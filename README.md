@@ -1,25 +1,44 @@
 # ☁️ IaC com GitHub Actions e Terraform
 
-Este repositório demonstra um fluxo de trabalho de **Infraestrutura como Código (IaC)**, automatizando a criação de recursos na AWS usando GitHub Actions e Terraform.
+Este repositório demonstra um fluxo de trabalho de **Infraestrutura como Código (IaC)**, automatizando o provisionamento de recursos na AWS usando GitHub Actions e Terraform.
 
 ---
 
 ### Visão Geral do Projeto
 
-O objetivo principal é simplificar o deploy de **sites estáticos**. O fluxo de trabalho é iniciado de forma 100% automatizada a partir de uma **Issue do GitHub**, eliminando a necessidade de comandos manuais.
+O objetivo principal é simplificar o deploy de infraestruturas de forma modular e controlada. O fluxo de trabalho é iniciado manualmente através da aba **Actions** do GitHub, eliminando a dependência de Issues para cada deploy.
 
-Ao abrir uma nova Issue, o pipeline de **CI/CD** entra em ação para executar as seguintes etapas:
+O projeto é dividido em módulos reutilizáveis, permitindo o provisionamento de recursos específicos de forma independente:
 
-1.  **Criação de um S3 Bucket**: O Terraform provisiona um novo bucket no Amazon S3.
-2.  **Configuração de Hospedagem de Site Estático**: O bucket é configurado para funcionar como um servidor de páginas web, com arquivos de `index.html` e `404.html`.
-3.  **Liberação de Acesso Público**: As permissões de acesso são ajustadas para que o bucket possa servir o conteúdo publicamente.
+1.  **Módulo S3**: Provisiona um S3 Bucket configurado para hospedagem de site estático, com liberação de acesso público.
+2.  **Módulo EC2**: Provisiona uma instância EC2, pronta para ser acessada.
 
-Isso permite que você tenha um ambiente de hospedagem pronto para suas páginas web de maneira rápida e segura, apenas com um título de issue.
+---
+
+### Módulos de Infraestrutura
+
+* **`modules/s3-website`**:
+    * **Propósito**: Cria e configura um S3 Bucket para hospedar um site estático.
+    * **Variáveis de Entrada**: `bucket_name`.
+
+* **`modules/ec2-instance`**:
+    * **Propósito**: Provisiona uma instância EC2 baseada em Ubuntu.
+    * **Variáveis de Entrada**: `instance_name`
 
 ---
 
 ### Como Usar
 
-1.  **Configure as chaves da AWS**: Adicione suas chaves `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY` como segredos no seu repositório GitHub.
-2.  **Abra uma nova Issue**: Crie uma nova Issue no repositório. O pipeline será ativado, criando um S3 Bucket com o nome derivado do título da issue. Exemplo: ```static-site[título-da-sua-issue]```
-3.  **Verifique a URL**: Após a conclusão do processo, você pode ver os detalhes na URL do bucket S3.
+1.  **Configure as chaves da AWS**: Adicione suas chaves `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY` como segredos no seu repositório GitHub para que o pipeline tenha as permissões necessárias.
+
+2.  **Execute o Workflow no GitHub Actions**:
+    * Vá para a aba **`Actions`** do repositório.
+    * No menu à esquerda, selecione o workflow que deseja executar (por exemplo, `Create S3 Static Site`).
+    * Clique em **`Run workflow`**.
+    * No campo `bucket_name`, insira o nome único para o seu bucket e clique em `Run workflow`.
+    * Para o EC2, o processo é o mesmo, mas você fornecerá o `name` da sua instância.
+
+3.  **Verifique a URL e a Conexão**:
+    * Após a conclusão do processo, verifique o status na sua conta da AWS.
+    * Para o S3, a URL pode ser encontrada na configuração de hospedagem estática do bucket.
+    * Para a instância EC2, a conexão é feita via SSH usando o IP público da instância.
