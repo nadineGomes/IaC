@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
     inputs:
       bucket_name: 
-      description: 'Nome do bucket S3 a ser criado'
-      required: true
-      type: string
+        description: 'Nome do bucket S3 a ser criado'
+        required: true
+        type: string
 
 jobs:
   deploy:
