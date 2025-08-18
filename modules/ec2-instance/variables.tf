@@ -4,7 +4,7 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "name" {
+variable "instance_name" {
   description = "Name of the EC2 instance"
   type        = string
 
