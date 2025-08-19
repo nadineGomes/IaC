@@ -21,12 +21,6 @@ jobs:
         with:
           terraform_version: 1.5.0
 
-      - name: Configure SSH Key
-        run: |
-          mkdir -p $HOME/.ssh
-          echo "${{ secrets.TF_SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
-          chmod 600 $HOME/.ssh/id_rsa
-
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -46,5 +40,4 @@ jobs:
           cd modules/ec2-instance
           terraform init
           terraform apply -auto-approve \
-            -var="instance_name=${{ github.event.inputs.instance_name }}" \
-            -var="private_key_path=$HOME/.ssh/id_rsa"
+            -var="instance_name=${{ github.event.inputs.instance_name }}"

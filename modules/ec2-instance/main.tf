@@ -12,37 +12,47 @@ data "aws_ami" "latest_ubuntu" {
 resource "aws_instance" "web_server" {
   ami           = data.aws_ami.latest_ubuntu.id
   instance_type = var.instance_type
-  key_name      = "minha-chave-aws"
+  user_data = <<-EOF
+              #!/bin/bash
+              
+              # Atualiza os pacotes e instala o Docker
+              sudo apt-get update -y
+              sudo apt-get install -y docker.io
+              
+              # Adiciona o usuário 'ubuntu' ao grupo docker para não precisar de sudo
+              sudo usermod -aG docker ubuntu
+              
+              # Inicia o serviço do Docker
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              
+              # Roda o container oficial do Nginx
+              # -d: roda em background
+              # -p 80:80: mapeia a porta 80 da instância para a porta 80 do container
+              # --name nginx_container: dá um nome ao container
+              # --restart always: garante que o container reinicie com a instância
+              docker run -d -p 80:80 --name nginx_container --restart always nginx:latest
+              EOF
 
-connection {
-  type        = "ssh"
-  user        = "ubuntu"
-  private_key = file(var.private_key_path)
-  host        = self.public_ip
-}
-
-provisioner "remote-exec" {
-  inline = [
-    "sudo apt-get update",
-    "sudo apt-get install -y nginx",
-    "sudo systemctl start nginx",
-    "sudo systemctl enable nginx",
-    "echo '<h1>Welcome to ${var.instance_name} in ${var.env} environment! The Nginx is alive!!!</h1>' | sudo tee /var/www/html/index.html"
-  ]
-}
 
   tags = {
     Name        = var.instance_name
     Environment = var.env
     provisioner = "web_server_terraform"
     Repo        = var.repo
-    
-    
-
+        
   }
-  
 }
 
+resource "aws_security_group" "web_server_sg" {
+  name        = "web_server_sg"
+  description = "Security group for web server"
 
-
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 

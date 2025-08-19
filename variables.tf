@@ -15,8 +15,3 @@ variable "instance_name" {
   type        = string
 
 }
-
-variable "private_key_path" {
-  description = "Path to the private key for SSH access to the EC2 instance"
-  type        = string
-}
