@@ -45,6 +45,7 @@ jobs:
 
       - name: Run Terraform for EC2
         run: |
+          cd modules/ec2-instance
           terraform apply -auto-approve \
             -var="instance_name=${{ github.event.inputs.instance_name }}" \
             -var="private_key_path=~/.ssh/id_rsa"
