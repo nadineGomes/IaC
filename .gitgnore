@@ -1,0 +1,7 @@
+# Terraform
+.terraform/
+
+# Arquivos de estado e segredos (não devem ser versionados)
+*.tfstate
+*.tfstate.backup
+*.tfvars
