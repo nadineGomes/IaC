@@ -5,7 +5,7 @@ provider "aws" {
 
 # Chama o módulo do S3 para criar o bucket
 module "s3_website_bucket" {
-  source      = "./modules/s3-website"
+  source      = "./modules/s3-bucket-static"
   bucket_name = var.bucket_name
 }
 
@@ -13,6 +13,6 @@ module "s3_website_bucket" {
 module "ec2_instance" {
   source        = "./modules/ec2-instance"
   instance_type = var.instance_type
-  name          = var.instance_name
+  instance_name = var.instance_name
 }
 
