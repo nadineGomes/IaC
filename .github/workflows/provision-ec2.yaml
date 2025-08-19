@@ -47,4 +47,4 @@ jobs:
           terraform init
           terraform apply -auto-approve \
             -var="instance_name=${{ github.event.inputs.instance_name }}" \
-            -var="private_key_path=~/.ssh/id_rsa"
+            -var="private_key_path=$HOME/.ssh/id_rsa"
