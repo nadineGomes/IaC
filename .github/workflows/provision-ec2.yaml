@@ -34,8 +34,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Terraform Init
-        run: terraform init
 
       # - name: Extract Instance Name from Issue
       #   run: |
@@ -46,6 +44,7 @@ jobs:
       - name: Run Terraform for EC2
         run: |
           cd modules/ec2-instance
+          terraform init
           terraform apply -auto-approve \
             -var="instance_name=${{ github.event.inputs.instance_name }}" \
             -var="private_key_path=~/.ssh/id_rsa"
