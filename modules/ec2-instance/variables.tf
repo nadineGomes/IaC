@@ -16,12 +16,12 @@ variable "env" {
   default     = "dev"
 
 }
-variable "ami_id" {
-  description = "AMI ID for the EC2 instance"
-  type        = string
-  default     = "ami-020cba7c55df1f615" # Linux Ubuntu 24.04 Canonical
+# variable "ami_id" {
+#   description = "AMI ID for the EC2 instance"
+#   type        = string
+#   default     = "ami-020cba7c55df1f615" # Linux Ubuntu 24.04 Canonical
 
-}
+# }
 
 variable "instance_type" {
   description = "Type of the EC2 instance"
