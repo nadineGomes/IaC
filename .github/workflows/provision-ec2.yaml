@@ -23,9 +23,9 @@ jobs:
 
       - name: Configure SSH Key
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.TF_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.TF_SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
